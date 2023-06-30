@@ -1,7 +1,24 @@
 <main class="h-full grid place-items-center">
   <div class="grid grid-cols-[300px_1fr_300px] gap-10 w-[90%] m-auto">
     <div>
-      <form>
+      <form [formGroup]="formDoctor">
+        <div>
+          <label
+            for="paciente"
+            class="block mb-2 text-sm font-medium text-gray-900"
+            >Pacientes</label
+          >
+          <select
+            id="especialidad"
+            formControlName="patient"
+            class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option selected>Selecciona la especialidad</option>
+            <option *ngFor="let item of carrers" [value]="item.id">
+              {{ item.nombre }}
+            </option>
+          </select>
+        </div>
         <div>
           <label
             for="especialidad"
@@ -10,13 +27,13 @@
           >
           <select
             id="especialidad"
+            formControlName="carrer"
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona la especialidad</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
+            <option *ngFor="let item of carrers" [value]="item.id">
+              {{ item.nombre }}
+            </option>
           </select>
         </div>
         <div>
@@ -27,13 +44,13 @@
           >
           <select
             id="doctor"
+            formControlName="doctor"
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona el doctor</option>
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="FR">France</option>
-            <option value="DE">Germany</option>
+            <option *ngFor="let item of carrers" [value]="item.id">
+              {{ item.nombre }}
+            </option>
           </select>
         </div>
         <div>
@@ -44,6 +61,7 @@
           >
           <select
             id="turno"
+            formControlName="turn"
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona el turno</option>
@@ -57,6 +75,7 @@
       <full-calendar
         *ngIf="calendarVisible"
         [options]="calendarOptions"
+        [events]="currentEvents"
       ></full-calendar>
     </div>
     <div>

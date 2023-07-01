@@ -10,7 +10,7 @@ export class CarrerService {
   constructor(private http: HttpClient) {}
 
   getCarrers(): Observable<any> {
-    return this.http.get(`${environment.apiBase}/Especialidad`);
+    return this.http.get(`${environment.apiBase}/Especialidades`);
   }
 
   daysByCarrer(id: number){

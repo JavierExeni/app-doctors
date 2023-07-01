@@ -14,7 +14,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona la especialidad</option>
-            <option *ngFor="let item of carrers" [value]="item.id">
+            <option *ngFor="let item of patients" [value]="item.id">
               {{ item.nombre }}
             </option>
           </select>
@@ -48,7 +48,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona el doctor</option>
-            <option *ngFor="let item of carrers" [value]="item.id">
+            <option *ngFor="let item of doctors" [value]="item.id">
               {{ item.nombre }}
             </option>
           </select>
@@ -65,8 +65,7 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona el turno</option>
-            <option value="0">Turno Mañana</option>
-            <option value="1">Turno Tarde</option>
+            <option *ngFor="let item of turns;" [value]="item.id">{{item.consultorio}} - {{item.horario}}</option>
           </select>
         </div>
       </form>
@@ -80,6 +79,10 @@
     </div>
     <div>
       <h1 class="text-[28px] font-normal mb-6">Eventos</h1>
+      <pre *ngIf="dates.length > 0; else noDates">
+        {{dates | json}}
+      </pre>
+      <ng-template #noDates></ng-template>
       <p>Sin eventos, selecciona otro día.</p>
     </div>
   </div>

@@ -16,6 +16,7 @@ import { CarrerService } from './services/carrer.service';
 import { FormBuilder } from '@angular/forms';
 import { PatientService } from './services/patient.service';
 import { DoctorService } from './services/doctor.service';
+import { TurnService } from './services/turn.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -59,57 +60,80 @@ export class AppComponent implements OnInit {
 
   patients: any[] = [];
   carrers: any[] = [];
+  doctors: any[] = [];
+  days: any[] = [];
+  turns: any[] = [];
+  dates: any[] = [];
+
+
 
   constructor(
     private changeDetector: ChangeDetectorRef,
     private fb: FormBuilder,
     private carrerService: CarrerService,
     private doctorService: DoctorService,
-    private patientService: PatientService
+    private patientService: PatientService,
+    private turnService: TurnService,
+    
   ) {}
   ngOnInit(): void {
     this.patientService.getPatients().subscribe({
-      next: (res) => (this.patients = res),
+      next: (res) => (this.patients = res.pacientes),
     });
     this.carrerService.getCarrers().subscribe({
-      next: (res) => (this.carrers = res),
+      next: (res) => (this.carrers = res.especialidades),
     });
 
     this.formDoctor.get('carrer')?.valueChanges.subscribe({
       next: (res: any) => {
-        this.doctorsByCarrerId(res.id);
-        this.daysByCarrerId(res.id);
+        console.log(res);
+        
+        this.doctorsByCarrerId(res);
+        this.daysByCarrerId(res);
       },
     });
 
     this.formDoctor.get('doctor')?.valueChanges.subscribe({
       next: (res: any) => {
-        this.daysByDoctorId(res.id);
+        this.daysByDoctorId(res);
+        this.turnsByDoctor(res)
       },
+    });
+
+    this.formDoctor.get('turn')?.valueChanges.subscribe({
+      next: (res: any) => {
+        this.datesByTurnId(res)
+      },
+    });
+  }
+
+  datesByTurnId(id: number) {
+    this.turnService.datesByTurn(id).subscribe({
+      next: (res: any) => this.dates = res.fechas
     });
   }
 
   doctorsByCarrerId(id: number) {
     this.doctorService.doctorsByCarrerId(id).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
+      next: (res) => this.doctors = res.doctores
     });
+  }
+
+  turnsByDoctor(id: number) {
+    this.turnService.turnsByDoctor(id).subscribe({
+      next: (res: any) => this.turns = res.turnos
+    });    
   }
 
   daysByCarrerId(id: number) {
     this.carrerService.daysByCarrer(id).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
+      next: (res: any) => this.days = res.dias
     });
   }
 
   daysByDoctorId(id: number) {
-    this.carrerService.daysByCarrer(id).subscribe({
-      next: (res) => {
-        console.log(res);
-      },
+    this.doctorService.daysByDoctor(id).subscribe({
+      next: (res: any) => this.days = res.dias
     });
   }
 

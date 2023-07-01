@@ -8,7 +8,12 @@ import { environment } from 'src/environments/environment.development';
 export class TurnService {
   constructor(private http: HttpClient) {}
 
-  daysByDoctor(id: number) {
+  turnsByDoctor(id: number) {
+    return this.http.get(`${environment.apiBase}/Turnos/${id}`);
+  }
+  
+  datesByTurn(id: number) {
     return this.http.get(`${environment.apiBase}/Fechas/Turnos/${id}`);
   }
+
 }

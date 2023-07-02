@@ -1,7 +1,7 @@
 <main class="h-full grid place-items-center">
   <div class="grid grid-cols-[300px_1fr_300px] gap-10 w-[90%] m-auto">
     <div>
-      <form [formGroup]="formDoctor">
+      <form [formGroup]="formDoctor" (ngSubmit)="onSubmit()">
         <div>
           <label
             for="paciente"
@@ -65,9 +65,18 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           >
             <option selected>Selecciona el turno</option>
-            <option *ngFor="let item of turns;" [value]="item.id">{{item.consultorio}} - {{item.horario}}</option>
+            <option *ngFor="let item of turns" [value]="item.id">
+              {{ item.consultorio }} - {{ item.horario }}
+            </option>
           </select>
         </div>
+        <button
+          type="submit"
+          [disabled]="formDoctor.invalid"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 disabled:bg-blue-700/75 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+        >
+          Registrar
+        </button>
       </form>
     </div>
     <div class="border-r-[1px] border-gray-200 px-10">
@@ -78,12 +87,25 @@
       ></full-calendar>
     </div>
     <div>
-      <h1 class="text-[28px] font-normal mb-6">Eventos</h1>
-      <pre *ngIf="dates.length > 0; else noDates">
-        {{dates | json}}
-      </pre>
-      <ng-template #noDates></ng-template>
-      <p>Sin eventos, selecciona otro día.</p>
+      <h1 class="text-[28px] font-normal mb-6">Horarios</h1>
+
+      <ul *ngIf="dates.length > 0; else noDates">
+        <li
+          *ngFor="let item of dates"
+          class="pb-3 cursor-pointer hover:text-black hover:font-semibold"
+        >
+          <!-- <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                   Reservas disponibles - {{item.nroReservasDisponibles}}
+                </p> -->
+
+          <p class="text-sm text-gray-500 truncate">
+            {{ item }}
+          </p>
+        </li>
+      </ul>
+      <ng-template #noDates>
+        <p>Sin eventos, selecciona otro día.</p>
+      </ng-template>
     </div>
   </div>
 </main>

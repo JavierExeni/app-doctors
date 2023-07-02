@@ -50,42 +50,6 @@ export class AppComponent implements OnInit {
     turn: ['', Validators.required],
   });
 
-  // currentEvents: EventInput[] = [
-  //   {
-  //     allDay: true,
-  //     backgroundColor: '#acddc7',
-  //     display: 'background',
-  //     daysOfWeek: [1, 3, 5],
-  //   },
-  //   {
-  //     date: '2023-07-03',
-  //     backgroundColor: '#cfe2ff',
-  //     borderColor: '#9ec5fe',
-  //     display: 'auto',
-  //     title: `Disponibles: 15`,
-  //     textColor: '#052c65',
-  //     extendedProps: {
-  //       dates: [
-  //         '08:30',
-  //         '08:50',
-  //         '09:10',
-  //         '09:30',
-  //         '09:50',
-  //         '10:10',
-  //         '10:30',
-  //         '10:50',
-  //         '11:10',
-  //         '11:30',
-  //         '11:50',
-  //         '12:10',
-  //         '12:30',
-  //         '12:50',
-  //         '13:10',
-  //       ],
-  //     },
-  //   },
-  // ];
-
   patients: any[] = [];
   carrers: any[] = [];
   doctors: any[] = [];
@@ -124,47 +88,6 @@ export class AppComponent implements OnInit {
       },
     });
 
-    // setTimeout(() => {
-    //   this.calendarOptions = {
-    //     ...this.calendarOptions,
-    //     events: [
-    //       {
-    //         allDay: true,
-    //         backgroundColor: '#acddc7',
-    //         display: 'background',
-    //         daysOfWeek: [1, 3, 5],
-    //       },
-    //       {
-    //         date: '2023-07-03',
-    //         backgroundColor: '#cfe2ff',
-    //         borderColor: '#9ec5fe',
-    //         display: 'auto',
-    //         title: `Disponibles: 15`,
-    //         textColor: '#052c65',
-    //         extendedProps: {
-    //           dates: [
-    //             '08:30',
-    //             '08:50',
-    //             '09:10',
-    //             '09:30',
-    //             '09:50',
-    //             '10:10',
-    //             '10:30',
-    //             '10:50',
-    //             '11:10',
-    //             '11:30',
-    //             '11:50',
-    //             '12:10',
-    //             '12:30',
-    //             '12:50',
-    //             '13:10',
-    //           ],
-    //         },
-    //       },
-    //     ],
-    //   };
-    // }, 2000);
-
     this.formDoctor.get('doctor')?.valueChanges.subscribe({
       next: (res: any) => {
         this.daysByDoctorId(res);
@@ -183,19 +106,24 @@ export class AppComponent implements OnInit {
     this.turnService.datesByTurn(id).subscribe({
       next: (res: any) => {
         let dates = res.fechas;
+        let events: any[] = [];
         dates.forEach((element: any) => {
-          // this.currentEvents.push({
-          //   date: element.data,
-          //   backgroundColor: '#cfe2ff',
-          //   borderColor: '#9ec5fe',
-          //   display: 'auto',
-          //   title: `Disponibles: ${element.nroReservasDisponibles}`,
-          //   textColor: '#052c65',
-          //   extendedProps: {
-          //     dates: element.horarios,
-          //   },
-          // });
+          events.push({
+            date: element.data,
+            backgroundColor: '#cfe2ff',
+            borderColor: '#9ec5fe',
+            display: 'auto',
+            title: `Disponibles: ${element.nroReservasDisponibles}`,
+            textColor: '#052c65',
+            extendedProps: {
+              dates: element.horarios,
+            },
+          });
         });
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events: [...(this.calendarOptions.events as any[]), ...events],
+        };
       },
     });
   }
@@ -235,13 +163,18 @@ export class AppComponent implements OnInit {
     this.doctorService.daysByDoctor(id).subscribe({
       next: (res: any) => {
         this.days = res.dias;
-        // this.currentEvents.pop();
-        // this.currentEvents.push({
-        //   allDay: true,
-        //   backgroundColor: '#acddc7',
-        //   display: 'background',
-        //   daysOfWeek: this.days.map((el) => el.index),
-        // });
+
+        this.calendarOptions = {
+          ...this.calendarOptions,
+          events: [
+            {
+              allDay: true,
+              backgroundColor: '#acddc7',
+              display: 'background',
+              daysOfWeek: this.days.map((el) => el.index),
+            },
+          ],
+        };
       },
     });
   }
